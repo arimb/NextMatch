@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NextMatch</title>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="script.js"></script>
+    <link rel="stylesheet" href="style.css"></link>
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.6/build/pure-min.css" integrity="sha384-Uu6IeWbM+gzNVXJcM9XV3SohHtmWE+3VGi496jvgX1jyvDTXfdK+rfZc8C1Aehk5" crossorigin="anonymous">
+</head>
+<body style="margin: 5px;">
+    <div id="add_team" style="margin-bottom: 20px;">
+        <input id="add_team" type="number" placeholder="Team #" min="1" step="1">
+        <button id="add_team_go">ADD</button>
+    </div>
+    <div id="teams">
+        <table id="teams" class="pure-table">
+            <thead>
+                <tr>
+                    <th>Team</th>
+                    <th>Competition</th>
+                    <th>Now Playing</th>
+                    <th>Next Match</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</body>
+</html>

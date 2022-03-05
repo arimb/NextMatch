@@ -1,0 +1,11 @@
+input::-webkit-inner-spin-button,
+input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+button.remove {
+    background-image: url('remove.jpg');
+    height: 24px;
+    width: 24px;
+}
