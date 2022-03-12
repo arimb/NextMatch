@@ -16,8 +16,9 @@ function addteam(){
     if (teamnum!=="" && !teams.includes(teamnum+'')) teams.push(teamnum + '');
     localStorage.setItem("teams", teams);
     console.log("hit");
+    $('input#add_team').val("");
+    $('input#add_team').focus();
     refresh();
-    
 }
 
 function refresh(){
@@ -32,19 +33,30 @@ function refresh(){
         for (let i=0; i<results.length; i++){
             if (!results[i]) continue;
             for (var event in results[i]){
+                // console.log(results[i][event]);
                 if (!results[i][event]) continue;
                 if(!results[i][event]["next_match_key"]) continue;
-                events[event] = {id: 1e6, key: "---"};
-                data[results[i][event]["team_key"]] = {
-                    "event": event,
-                    "next": {"id": results[i][event]["next_match"]
-                }
+                events[event] = {"id": 1e6, "key": "---"};
+                // console.log(results[i][event]["next_match_key"]);
+                var request = new XMLHttpRequest();
+		        request.open('GET', 'https://www.thebluealliance.com/api/v3/match/' + results[i][event]["next_match_key"] + '/simple', true);
+                request.setRequestHeader('X-TBA-Auth-Key', 'NtgN6wmhfU31LHr9Jb7fm15EzGsyxXTmc0Wycbv4MalqDEJIYZu3oHOeYLmewH3P');
+                request.onload = function(){
+                    // console.log(results[i][event]);
+                    console.log(this.response);
+                    data[teams[i]] = {
+                        "event": event,
+                        "next": {"key": results[i][event]["next_match_key"], "id": matchid(this.response)}
+                    }
+                };
+                request.onerror = function(){console.log("Error - " + results[i][event]["next_match"])};
+                request.send();
                 break;
             }
             data[teams[i]] = {"event": "", "next": "", "current": ""};
         }
     });
-    // console.log(events);
+    console.log(data);
     // console.log(Object.keys(events));
 
     promises = Object.keys(events).map(event => new Promise(resolve => {		//make API calls
@@ -70,17 +82,21 @@ function refresh(){
     for (var team in data) {
         data[team]["current"] = events[data[team]["event"]];
     }
-    teams.sort((a,b)=> {(data[a]["next"]-data[a]["current"]) - (data[b]["next"]-data[b]["current"])});
+    // console.log(data);
+    // teams.sort((a,b)=> {console.log(a); console.log(b); (data[a]["next"]-data[a]["current"]) - (data[b]["next"]-data[b]["current"]);});
 
     for (var team in teams) {
         // $('table#teams tbody').append(
         //     '<tr id="' + teamnum + '"> <td>' + teamnum + '</td> <td></td><td></td><td></td><td><button class="remove"></td></tr>'
         // );
-        // $('input#add_team').val("");
-        // $('input#add_team').focus();
     }
 }
 
 function matchid(match){
+    console.log(match)
+    // console.log(match["key"])
+    // console.log(indexOf(match["comp_level"]))
+    // console.log(match["set_number"])
+    // console.log(match["match_number"])
     return ['qm', 'ef', 'qf', 'sf', 'f'].indexOf(match["comp_level"])*10000 + match["set_number"]*1000 + match["match_number"];
 }
